@@ -62,7 +62,7 @@ def inspect_openapi(
 ) -> dict[str, Any]:
     document = load_openapi(spec_file)
     operations = parse_openapi(document)
-    config = load_config(config_path)
+    config = load_config(config_path, validate_env=False)
     used_names: set[str] = set()
     tools: list[dict[str, Any]] = []
 

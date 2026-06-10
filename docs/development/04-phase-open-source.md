@@ -109,86 +109,86 @@ README 第一屏必须包含：
 
 ### 1. README
 
-- [ ] 写项目 tagline
-- [ ] 写 Why
-- [ ] 写 Quick Start
-- [ ] 写 inspect 示例
-- [ ] 写 serve 示例
-- [ ] 写安全默认策略
-- [ ] 写配置示例
-- [ ] 写 MCP 客户端配置
-- [ ] 写 Roadmap
+- [x] 写项目 tagline
+- [x] 写 Why
+- [x] 写 Quick Start
+- [x] 写 inspect 示例
+- [x] 写 serve 示例
+- [x] 写安全默认策略
+- [x] 写配置示例
+- [x] 写 MCP 客户端配置
+- [x] 写 Roadmap
 
 ### 2. 示例
 
-- [ ] 创建 Todo SaaS Demo OpenAPI
-- [ ] 创建 Todo SaaS mock server
-- [ ] 创建 Petstore 子集 OpenAPI
-- [ ] 创建 GitHub readonly 示例配置
-- [ ] 为每个示例写 README
+- [x] 创建 Todo SaaS Demo OpenAPI
+- [x] 创建 Todo SaaS mock server
+- [x] 创建 Petstore 子集 OpenAPI
+- [x] 创建 GitHub readonly 示例配置
+- [x] 为每个示例写 README
 
 ### 3. 打包发布
 
-- [ ] 完善 `pyproject.toml`
-- [ ] 配置 console script `safe-oas2mcp`
+- [x] 完善 `pyproject.toml`
+- [x] 配置 console script `safe-oas2mcp`
 - [ ] 验证 `pipx install .`
-- [ ] 验证 `uvx --from . safe-oas2mcp`
-- [ ] 准备 PyPI 包元数据
+- [x] 验证 `uvx --from . safe-oas2mcp`
+- [x] 准备 PyPI 包元数据
 - [ ] 发布前确认包名可用
 
 ### 4. CI
 
-- [ ] 配置 GitHub Actions
-- [ ] 运行 pytest
-- [ ] 运行 lint
-- [ ] 运行 type check
-- [ ] 运行安全脱敏测试
-- [ ] 上传覆盖率报告
+- [x] 配置 GitHub Actions
+- [x] 运行 pytest
+- [x] 运行 lint
+- [x] 运行 type check
+- [x] 运行安全脱敏测试
+- [x] 上传覆盖率报告
 
 ### 5. Docker
 
-- [ ] 创建 Dockerfile
+- [x] 创建 Dockerfile
 - [ ] 支持 inspect
 - [ ] 支持 serve
-- [ ] 文档说明 env 注入 token
+- [x] 文档说明 env 注入 token
 - [ ] 验证容器内不打印 secret
 
 ### 6. MCP 客户端文档
 
-- [ ] Claude Desktop 配置
-- [ ] Cursor 配置
-- [ ] Windsurf 配置
-- [ ] 本地 stdio 使用说明
-- [ ] 常见错误排查
+- [x] Claude Desktop 配置
+- [x] Cursor 配置
+- [x] Windsurf 配置
+- [x] 本地 stdio 使用说明
+- [x] 常见错误排查
 
 ### 7. 安全文档
 
-- [ ] 创建 `SECURITY.md`
-- [ ] 写威胁模型
-- [ ] 写默认策略说明
-- [ ] 写 Token 处理说明
-- [ ] 写响应脱敏说明
-- [ ] 写漏洞报告方式
+- [x] 创建 `SECURITY.md`
+- [x] 写威胁模型
+- [x] 写默认策略说明
+- [x] 写 Token 处理说明
+- [x] 写响应脱敏说明
+- [x] 写漏洞报告方式
 
 ### 8. 社区文件
 
-- [ ] 创建 `CONTRIBUTING.md`
-- [ ] 创建 issue 模板
-- [ ] 创建 bug report 模板
-- [ ] 创建 feature request 模板
-- [ ] 创建 pull request 模板
-- [ ] 创建 changelog
+- [x] 创建 `CONTRIBUTING.md`
+- [x] 创建 issue 模板
+- [x] 创建 bug report 模板
+- [x] 创建 feature request 模板
+- [x] 创建 pull request 模板
+- [x] 创建 changelog
 - [ ] 确认许可证
 
 ## 验收标准
 
 - [ ] 新用户可以按 README 在 5 分钟内跑通 Todo demo
-- [ ] README 清楚表达 Safe OpenAPI to MCP Gateway 定位
+- [x] README 清楚表达 Safe OpenAPI to MCP Gateway 定位
 - [ ] CI 通过
-- [ ] 示例能执行
+- [x] 示例能执行
 - [ ] MCP 客户端配置可用
-- [ ] 安全文档完整
-- [ ] 发布流程清晰
+- [x] 安全文档完整
+- [x] 发布流程清晰
 
 ## 需要确认后才能继续的事项
 
@@ -196,5 +196,14 @@ README 第一屏必须包含：
 - [ ] 是否发布到 PyPI
 - [ ] 是否创建 Docker Hub/GHCR 镜像
 - [ ] 是否创建项目 logo
-- [ ] 是否把 GitHub readonly demo 放入第一批示例
+- [x] 是否把 GitHub readonly demo 放入第一批示例
 
+## 当前未勾选项说明
+
+- `pipx install .`：本机未安装 `pipx`，暂未验证。
+- 发布前确认包名可用：需要发布前查询 PyPI 实时状态。
+- Docker inspect / serve：Docker CLI 存在，但 Docker Desktop Linux engine 当前未运行，暂未验证镜像构建和容器执行。
+- 新用户 5 分钟 Todo demo：本地示例 inspect 已验证，需要发布前用干净环境完整演练安装和示例。
+- CI 通过：GitHub Actions 工作流已配置，本地等价检查已通过；需要 push 后由 GitHub Actions 实际跑完。
+- MCP 客户端配置可用：配置文档已写，需要在 Claude Desktop / Cursor / Windsurf 客户端中人工验证。
+- 许可证、PyPI 发布、镜像发布、logo：属于发布策略选择，需要你确认后再执行。

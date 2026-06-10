@@ -53,7 +53,11 @@ class SafeOASConfig(BaseModel):
     max_response_bytes: int = 1_000_000
 
 
-def load_config(path: str | Path | None = None) -> SafeOASConfig:
+def load_config(
+    path: str | Path | None = None,
+    *,
+    validate_env: bool = True,
+) -> SafeOASConfig:
     config_path = Path(path) if path is not None else Path("safe-oas2mcp.config.yaml")
     if not config_path.exists():
         return SafeOASConfig()
@@ -75,7 +79,8 @@ def load_config(path: str | Path | None = None) -> SafeOASConfig:
             raise ConfigError("auth.type must be one of: none, bearer, api_key") from exc
         raise ConfigError(f"Invalid config: {exc}") from exc
 
-    _validate_required_env(config)
+    if validate_env:
+        _validate_required_env(config)
     return config
 
 

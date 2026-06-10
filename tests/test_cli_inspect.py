@@ -177,3 +177,38 @@ policy:
     assert tool["risk"] == "high"
     assert tool["status"] == "confirm"
     assert "Policy override matched: DELETE /tasks/{task_id}" in tool["reasons"]
+
+
+def test_inspect_with_config_does_not_require_auth_env(tmp_path, monkeypatch):
+    monkeypatch.delenv("API_TOKEN", raising=False)
+    spec_path = tmp_path / "openapi.yaml"
+    spec_path.write_text(
+        """
+openapi: 3.0.3
+info:
+  title: API
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      operationId: listItems
+      responses:
+        "200":
+          description: OK
+""".strip(),
+        encoding="utf-8",
+    )
+    config_path = tmp_path / "safe-oas2mcp.config.yaml"
+    config_path.write_text(
+        """
+auth:
+  type: bearer
+  token_env: API_TOKEN
+""".strip(),
+        encoding="utf-8",
+    )
+
+    result = runner.invoke(app, ["inspect", str(spec_path), "--config", str(config_path)])
+
+    assert result.exit_code == 0
+    assert "list_items" in result.stdout
