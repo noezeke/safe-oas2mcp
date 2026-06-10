@@ -1,0 +1,21 @@
+HIGH_RISK_KEYWORDS = {
+    "payment",
+    "refund",
+    "transfer",
+    "payout",
+    "invoice",
+    "admin",
+    "root",
+    "role",
+    "permission",
+    "user",
+    "delete",
+    "remove",
+    "export",
+    "bulk",
+    "batch",
+    "secret",
+    "token",
+    "key",
+}
+

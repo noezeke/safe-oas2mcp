@@ -1,0 +1,86 @@
+openapi: 3.0.3
+info:
+  title: Todo SaaS Demo API
+  version: 1.0.0
+servers:
+  - url: https://api.todo.example.com
+paths:
+  /tasks:
+    get:
+      operationId: listTasks
+      summary: List tasks
+      tags: [tasks]
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [open, done]
+      responses:
+        "200":
+          description: OK
+    post:
+      operationId: createTask
+      summary: Create task
+      tags: [tasks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTask"
+      responses:
+        "201":
+          description: Created
+  /tasks/{task_id}:
+    patch:
+      operationId: updateTask
+      summary: Update task
+      tags: [tasks]
+      parameters:
+        - $ref: "#/components/parameters/TaskId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTask"
+      responses:
+        "200":
+          description: OK
+    delete:
+      operationId: deleteTask
+      summary: Delete task
+      tags: [tasks]
+      parameters:
+        - $ref: "#/components/parameters/TaskId"
+      responses:
+        "204":
+          description: Deleted
+components:
+  parameters:
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    CreateTask:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+        due_date:
+          type: string
+          format: date
+    UpdateTask:
+      type: object
+      properties:
+        title:
+          type: string
+        completed:
+          type: boolean
+

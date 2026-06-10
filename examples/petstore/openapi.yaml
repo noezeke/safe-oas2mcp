@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: Petstore Demo API
+  version: 1.0.0
+servers:
+  - url: https://petstore.example.com
+paths:
+  /pets:
+    get:
+      operationId: listPets
+      summary: List pets
+      tags: [pets]
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+      responses:
+        "200":
+          description: OK
+    post:
+      operationId: createPet
+      summary: Create pet
+      tags: [pets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                tag:
+                  type: string
+      responses:
+        "201":
+          description: Created
+
