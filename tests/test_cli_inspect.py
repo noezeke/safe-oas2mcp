@@ -126,3 +126,54 @@ paths: {}
 
     assert result.exit_code == 1
     assert "--format must be either 'table' or 'json'" in result.stderr
+
+
+def test_inspect_applies_policy_config(tmp_path):
+    spec_path = tmp_path / "openapi.yaml"
+    spec_path.write_text(
+        """
+openapi: 3.0.3
+info:
+  title: Todo API
+  version: 1.0.0
+paths:
+  /tasks/{task_id}:
+    delete:
+      operationId: deleteTask
+      summary: Delete task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+""".strip(),
+        encoding="utf-8",
+    )
+    config_path = tmp_path / "safe-oas2mcp.config.yaml"
+    config_path.write_text(
+        """
+policy:
+  overrides:
+    "DELETE /tasks/{task_id}":
+      status: confirm
+      risk: high
+      reason: "Allow task delete preview only"
+""".strip(),
+        encoding="utf-8",
+    )
+
+    result = runner.invoke(
+        app,
+        ["inspect", str(spec_path), "--config", str(config_path), "--format", "json"],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    tool = payload["tools"][0]
+    assert tool["risk"] == "high"
+    assert tool["status"] == "confirm"
+    assert "Policy override matched: DELETE /tasks/{task_id}" in tool["reasons"]

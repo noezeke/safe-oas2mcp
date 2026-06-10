@@ -66,3 +66,28 @@ auth:
     with pytest.raises(ConfigError, match="auth.type must be one of"):
         load_config(config_path)
 
+
+def test_loads_policy_rules_from_config(tmp_path):
+    config_path = tmp_path / "safe-oas2mcp.config.yaml"
+    config_path.write_text(
+        """
+policy:
+  include:
+    - "GET /tasks"
+  exclude:
+    - "DELETE /*"
+  overrides:
+    "DELETE /tasks/{task_id}":
+      status: confirm
+      risk: high
+      reason: "Allow task delete preview only"
+""".strip(),
+        encoding="utf-8",
+    )
+
+    config = load_config(config_path)
+
+    assert config.policy.include == ["GET /tasks"]
+    assert config.policy.exclude == ["DELETE /*"]
+    assert config.policy.overrides["DELETE /tasks/{task_id}"].status == "confirm"
+    assert config.policy.overrides["DELETE /tasks/{task_id}"].risk == "high"

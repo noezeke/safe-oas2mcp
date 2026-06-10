@@ -33,11 +33,15 @@ def inspect_command(
         str,
         typer.Option("--format", help="Output format: table or json"),
     ] = "table",
+    config_path: Annotated[
+        Path | None,
+        typer.Option("--config", help="Path to safe-oas2mcp.config.yaml"),
+    ] = None,
 ) -> None:
     """Inspect which MCP tools would be generated."""
     try:
-        payload = inspect_openapi(spec_file)
-    except (OpenAPILoadError, OpenAPIParseError) as exc:
+        payload = inspect_openapi(spec_file, config_path=config_path)
+    except (OpenAPILoadError, OpenAPIParseError, ConfigError) as exc:
         typer.echo(f"Error: {exc}", err=True)
         raise typer.Exit(code=1) from exc
 
@@ -52,15 +56,19 @@ def inspect_command(
     _render_table(payload)
 
 
-def inspect_openapi(spec_file: Path) -> dict[str, Any]:
+def inspect_openapi(
+    spec_file: Path,
+    config_path: Path | None = None,
+) -> dict[str, Any]:
     document = load_openapi(spec_file)
     operations = parse_openapi(document)
+    config = load_config(config_path)
     used_names: set[str] = set()
     tools: list[dict[str, Any]] = []
 
     for operation in operations:
         metadata = build_tool_metadata(operation, used_names)
-        risk = evaluate_operation_risk(operation)
+        risk = evaluate_operation_risk(operation, config.policy)
         tools.append(
             {
                 "name": metadata.name,
@@ -116,11 +124,11 @@ def build_gateway_from_files(
 
 def _render_table(payload: dict[str, Any]) -> None:
     table = Table(title="safe-oas2mcp inspect")
-    table.add_column("Tool")
-    table.add_column("Method")
-    table.add_column("Path")
-    table.add_column("Risk")
-    table.add_column("Status")
+    table.add_column("Tool", no_wrap=True)
+    table.add_column("Method", no_wrap=True)
+    table.add_column("Path", no_wrap=True)
+    table.add_column("Risk", no_wrap=True)
+    table.add_column("Status", no_wrap=True)
     table.add_column("Reasons", no_wrap=True)
 
     for tool in payload["tools"]:
@@ -133,7 +141,7 @@ def _render_table(payload: dict[str, Any]) -> None:
             "; ".join(tool["reasons"]),
         )
 
-    console = Console(width=200)
+    console = Console(width=300)
     console.print(table)
     summary = payload["summary"]
     console.print(

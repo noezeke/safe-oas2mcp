@@ -150,98 +150,97 @@ MVP 审计字段：
 
 ### 1. 风险策略强化
 
-- [ ] 实现关键词分组
-- [ ] 支持从 path 匹配关键词
-- [ ] 支持从 operationId 匹配关键词
-- [ ] 支持从 summary/description 匹配关键词
-- [ ] 支持从 tags 匹配关键词
-- [ ] 支持从 parameter names 匹配关键词
-- [ ] 支持从 requestBody property names 匹配关键词
-- [ ] 输出命中的关键词和来源
-- [ ] GET 命中 bulk/export 时提升为 high
-- [ ] money/permission/destructive 命中时提升为 high 或 critical
+- [x] 实现关键词分组
+- [x] 支持从 path 匹配关键词
+- [x] 支持从 operationId 匹配关键词
+- [x] 支持从 summary/description 匹配关键词
+- [x] 支持从 tags 匹配关键词
+- [x] 支持从 parameter names 匹配关键词
+- [x] 支持从 requestBody property names 匹配关键词
+- [x] 输出命中的关键词和来源
+- [x] GET 命中 bulk/export 时提升为 high
+- [x] money/permission/destructive 命中时提升为 high 或 critical
 
 ### 2. include/exclude/override
 
-- [ ] 支持 include 规则
-- [ ] 支持 exclude 规则
-- [ ] 支持 policy overrides
-- [ ] exclude 优先于 include
-- [ ] override 必须写入 reasons
-- [ ] inspect 输出策略来源
-- [ ] 测试配置放宽策略时的输出
+- [x] 支持 include 规则
+- [x] 支持 exclude 规则
+- [x] 支持 policy overrides
+- [x] exclude 优先于 include
+- [x] override 必须写入 reasons
+- [x] inspect 输出策略来源
+- [x] 测试配置放宽策略时的输出
 
 ### 3. Request preview
 
-- [ ] 实现 preview 数据结构
-- [ ] preview 包含 method
-- [ ] preview 包含 URL 但不包含 secret
-- [ ] preview 包含 query
-- [ ] preview 包含 body preview
-- [ ] preview 包含 risk/status/reasons
-- [ ] confirm tool 默认返回 preview
+- [x] 实现 preview 数据结构
+- [x] preview 包含 method
+- [x] preview 包含 URL 但不包含 secret
+- [x] preview 包含 query
+- [x] preview 包含 body preview
+- [x] preview 包含 risk/status/reasons
+- [x] confirm tool 默认返回 preview
 
 ### 4. 请求脱敏
 
-- [ ] 脱敏 Authorization header
-- [ ] 脱敏 API Key header
-- [ ] 脱敏 query 中的 token/key
-- [ ] 脱敏 body 中的 password/token/secret
-- [ ] 错误信息中不泄露 secret
-- [ ] 日志中不泄露 secret
+- [x] 脱敏 Authorization header
+- [x] 脱敏 API Key header
+- [x] 脱敏 query 中的 token/key
+- [x] 脱敏 body 中的 password/token/secret
+- [x] 错误信息中不泄露 secret
+- [x] 日志中不泄露 secret
 
 ### 5. 响应脱敏
 
-- [ ] JSON 对象递归脱敏
-- [ ] JSON 数组递归脱敏
-- [ ] text 响应做基础 secret pattern 脱敏
-- [ ] email 脱敏
-- [ ] phone 脱敏
-- [ ] token/secret/password 脱敏
+- [x] JSON 对象递归脱敏
+- [x] JSON 数组递归脱敏
+- [x] text 响应做基础 secret pattern 脱敏
+- [x] email 脱敏
+- [x] phone 脱敏
+- [x] token/secret/password 脱敏
 
 ### 6. 响应大小限制
 
-- [ ] 配置默认最大响应大小
-- [ ] 超出限制时截断或拒绝
-- [ ] 返回结果标记 truncated
-- [ ] 审计日志记录 truncated
+- [x] 配置默认最大响应大小
+- [x] 超出限制时截断或拒绝
+- [x] 返回结果标记 truncated
+- [x] 审计日志记录 truncated
 
 ### 7. 审计日志
 
-- [ ] 实现 JSON Lines 审计日志
-- [ ] 记录 tool call
-- [ ] 记录 preview-only call
-- [ ] 记录 executed call
-- [ ] 记录 HTTP status code
-- [ ] 记录 duration
-- [ ] 记录 error category
-- [ ] 确认日志不包含 secret
+- [x] 实现 JSON Lines 审计日志
+- [x] 记录 tool call
+- [x] 记录 preview-only call
+- [x] 记录 executed call
+- [x] 记录 HTTP status code
+- [x] 记录 duration
+- [x] 记录 error category
+- [x] 确认日志不包含 secret
 
 ### 8. 安全测试
 
-- [ ] 添加高危关键词测试集
-- [ ] 添加认证脱敏测试
-- [ ] 添加响应脱敏测试
-- [ ] 添加审计日志脱敏测试
-- [ ] 添加响应大小限制测试
-- [ ] 添加 override 策略测试
+- [x] 添加高危关键词测试集
+- [x] 添加认证脱敏测试
+- [x] 添加响应脱敏测试
+- [x] 添加审计日志脱敏测试
+- [x] 添加响应大小限制测试
+- [x] 添加 override 策略测试
 
 ## 验收标准
 
-- [ ] inspect 能解释高危关键词来源
-- [ ] include/exclude/override 生效
-- [ ] confirm tool 默认返回 request preview
-- [ ] Token 不泄露到输出、日志、schema、description
-- [ ] 响应敏感字段被脱敏
-- [ ] 大响应被限制
-- [ ] 审计日志可用且不泄露 secret
-- [ ] 安全测试通过
+- [x] inspect 能解释高危关键词来源
+- [x] include/exclude/override 生效
+- [x] confirm tool 默认返回 request preview
+- [x] Token 不泄露到输出、日志、schema、description
+- [x] 响应敏感字段被脱敏
+- [x] 大响应被限制
+- [x] 审计日志可用且不泄露 secret
+- [x] 安全测试通过
 
 ## 需要确认后才能继续的事项
 
-- [ ] 默认关键词列表是否调整
-- [ ] email/phone 是否默认脱敏
-- [ ] 大响应是截断还是拒绝
-- [ ] 审计日志默认开启还是配置开启
-- [ ] policy override 是否允许把 DELETE 从 disabled 改成 confirm
-
+- [x] 默认关键词列表是否调整
+- [x] email/phone 是否默认脱敏
+- [x] 大响应是截断还是拒绝
+- [x] 审计日志默认开启还是配置开启
+- [x] policy override 是否允许把 DELETE 从 disabled 改成 confirm

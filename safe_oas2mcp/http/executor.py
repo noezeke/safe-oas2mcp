@@ -9,7 +9,7 @@ import httpx
 from safe_oas2mcp.config import ConfigError, SafeOASConfig
 from safe_oas2mcp.http.auth import build_configured_headers
 from safe_oas2mcp.models import Operation
-from safe_oas2mcp.security.redactor import redact_secrets
+from safe_oas2mcp.security.redactor import redact_secrets, redact_text
 
 
 @dataclass(frozen=True)
@@ -64,12 +64,12 @@ async def execute_http_request(
     except httpx.TimeoutException as exc:
         return {
             "ok": False,
-            "error": {"type": "timeout", "message": str(exc)},
+            "error": {"type": "timeout", "message": redact_text(str(exc))},
         }
     except httpx.HTTPError as exc:
         return {
             "ok": False,
-            "error": {"type": "network_error", "message": str(exc)},
+            "error": {"type": "network_error", "message": redact_text(str(exc))},
         }
 
     if len(response.content) > max_response_bytes:

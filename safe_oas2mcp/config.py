@@ -7,6 +7,8 @@ from typing import Any, Literal
 import yaml
 from pydantic import BaseModel, Field, ValidationError
 
+from safe_oas2mcp.models import RiskLevel, ToolStatus
+
 
 class ConfigError(ValueError):
     """Raised when safe-oas2mcp configuration is invalid."""
@@ -24,10 +26,29 @@ class HeaderValueConfig(BaseModel):
     env: str | None = None
 
 
+class PolicyOverride(BaseModel):
+    status: ToolStatus | None = None
+    risk: RiskLevel | None = None
+    reason: str
+
+
+class PolicyConfig(BaseModel):
+    include: list[str] = Field(default_factory=list)
+    exclude: list[str] = Field(default_factory=list)
+    overrides: dict[str, PolicyOverride] = Field(default_factory=dict)
+
+
+class AuditConfig(BaseModel):
+    enabled: bool = False
+    path: str = "safe-oas2mcp.audit.jsonl"
+
+
 class SafeOASConfig(BaseModel):
     base_url: str | None = None
     auth: AuthConfig = Field(default_factory=AuthConfig)
     headers: dict[str, HeaderValueConfig] = Field(default_factory=dict)
+    policy: PolicyConfig = Field(default_factory=PolicyConfig)
+    audit: AuditConfig = Field(default_factory=AuditConfig)
     timeout_seconds: float = 30
     max_response_bytes: int = 1_000_000
 
