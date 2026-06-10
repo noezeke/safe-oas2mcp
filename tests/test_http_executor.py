@@ -1,4 +1,6 @@
 import asyncio
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import httpx
 
@@ -182,6 +184,50 @@ def test_execute_request_returns_structured_timeout_error():
 
     assert result["ok"] is False
     assert result["error"]["type"] == "timeout"
+
+
+def test_execute_request_ignores_ambient_proxy_for_direct_api_calls(monkeypatch):
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:
+            body = b'{"items":[{"id":"task-1"}]}'
+            self.send_response(200)
+            self.send_header("content-type", "application/json")
+            self.send_header("content-length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, format: str, *args: object) -> None:
+            return
+
+    server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+
+    try:
+        monkeypatch.setenv("HTTP_PROXY", "http://127.0.0.1:1")
+        monkeypatch.setenv("HTTPS_PROXY", "http://127.0.0.1:1")
+        monkeypatch.delenv("NO_PROXY", raising=False)
+        port = server.server_address[1]
+        request_plan = build_http_request(
+            Operation(method="GET", path="/tasks", server_urls=[f"http://127.0.0.1:{port}"]),
+            {},
+            SafeOASConfig(),
+        )
+
+        result = asyncio.run(
+            execute_http_request(
+                request_plan,
+                timeout_seconds=3,
+                max_response_bytes=1024,
+            )
+        )
+
+        assert result["ok"] is True
+        assert result["data"] == {"items": [{"id": "task-1"}]}
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
 
 
 def test_executor_supports_write_methods_even_when_policy_blocks_registration():

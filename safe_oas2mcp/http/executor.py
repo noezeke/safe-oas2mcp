@@ -53,6 +53,7 @@ async def execute_http_request(
         async with httpx.AsyncClient(
             timeout=timeout_seconds,
             transport=transport,
+            trust_env=False,
         ) as client:
             response = await client.request(
                 request_plan.method,
